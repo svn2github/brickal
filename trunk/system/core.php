@@ -1,21 +1,32 @@
 <?php
 
 class Core {
+	
+	//Configuration object	
+	public static $config;
 
 	public static function execute() {
 		//Assign autoloader to core class	
 		spl_autoload_register('Core::load_class');
 
+		//Load global configuration
+		self::$config = new Core_Persistent();
+		self::$config->load('config');
+		
 		//Initialize log library
 		Core_Log::init();
-		Core_Log::log('Core initialized!');
+		Core_Log::log('Core classes initialized');
 		
 		Core_Router::route();
 
 		Core_Log::log('Core finished!');
 		var_dump(Core_Log::$_log);
+		
+		//Deinitialize objects and variables
+		self::$config->save();
 	}
 
+	//Converts an filename like controller/home to APPPATH/controller/home.php
 	public static function file_to_uri($file_name) {
 		//Define the system folders of Brickal
 		//These shouldn't exist in the application folder
@@ -48,6 +59,7 @@ class Core {
 		return $path;
 	}
 	
+	//Converts and loads a file
 	public static function load_file($file_name)
 	{
 		$path = self::file_to_uri($file_name);
@@ -65,6 +77,7 @@ class Core {
 		}
 	}
 	
+	//Load a like (for example: Controller_Home > APPPATH/controller/home.php )
 	public static function load_class($class_name) {
 		self::load_file(implode('/', explode('_', strtolower($class_name))));
 	}

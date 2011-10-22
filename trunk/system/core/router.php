@@ -39,7 +39,19 @@ class Core_Router {
 			$segments[1] = 'index';
 		}
 		
-		var_dump($segments);
+		//Extract controller and action		
+		$controller = $segments[0];
+		$action = $segments[1];
+		
+		//Extract parameters
+		$params = $segments;
+		$params[0] = NULL;
+		$params[1] = NULL;
+		$params = array_values(array_filter($params));
+		var_dump($params);
+		
+		//Add routing results to logbook
+		Core_Log::log('Routing finished, calling Controller_' . ucfirst($controller) . '::' . $action);
 	}
 
 }

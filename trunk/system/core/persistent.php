@@ -21,10 +21,11 @@ class Core_Persistent
 		$this->_data_location = $name;
 		
 		//Check if the file does exist
-		if (file_exists($this->core->load_file($name, TRUE)))
+		if (file_exists(Core::file_to_uri($name)))
 		{
 			//Load the file using the core function
-			$this->_data = $this->core->load_file($this->_data_location);
+			include(Core::file_to_uri($name));
+			$this->_data = $data;
 			
 			//Overload with the defaults
 			if (isset($scheme))
@@ -33,7 +34,8 @@ class Core_Persistent
 				$this->_data_scheme_location = $scheme;
 				
 				//Load the data scheme file using the core function
-				$this->_data_scheme = $this->core->load_file($this->_data_scheme_location);
+				include(Core::file_to_uri($name));
+				$this->_data_scheme = $data;
 				
 				//Loop through the scheme to override the options whose aren't set
 				foreach($this->_data_scheme as $name => $details)
@@ -77,9 +79,9 @@ class Core_Persistent
 		$filedata = '<?php' . "\n" . '$data = ' . var_export($content, TRUE) . ';';
 		
 		//Write the data to the file if the file is writable
-		if (is_writable($this->core->load_file($this->_data_location, TRUE)) or ! file_exists($this->core->load_file($this->_data_location, TRUE)))
+		if (is_writable(Core::file_to_uri($this->_data_location)) or ! file_exists(Core::file_to_uri($this->_data_location)))
 		{
-			file_put_contents($this->core->load_file($this->_data_location, TRUE), $filedata);
+			file_put_contents(Core::file_to_uri($this->_data_location), $filedata);
 		}
 		else
 		{
