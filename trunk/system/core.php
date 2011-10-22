@@ -5,9 +5,9 @@ class Core {
 	public static function execute() {
 		spl_autoload_register('Core::load_class');
 
-		Core_Router::get();
+		Core_Router::route();
 
-		echo('exectest');
+		echo('>>');
 	}
 
 	public static function load_class($class_name) {
@@ -20,10 +20,10 @@ class Core {
 		$system_folders = array('core', 'admin', 'base');
 
 		//Convert the uri to an array by exploding it
-		$short = explode('/', $file_name);
+		$uri = explode('/', $file_name);
 
 		//Modules can be in two folders, since the system folder should be read-only
-		if ($short[0] == 'module') {
+		if ($uri[0] == 'module') {
 			//Check if the file is in the application folder (overloading)
 			//Otherwise we take the one in the system folder
 			if (file_exists(APPPATH . '/' . implode('/', $short) . EXT)) {
@@ -33,7 +33,7 @@ class Core {
 			}
 		} else {
 			//Check if the first segment is in the list of system folders as defined above
-			if (in_array($short[0], $system_folders)) {
+			if (in_array($uri[0], $system_folders)) {
 				$path = SYSPATH . '/';
 			} else {
 				$path = APPPATH . '/';
@@ -41,7 +41,7 @@ class Core {
 		}
 
 		//Make the path complete by adding an extension_loaded
-		$path .= implode('/', $short) . EXT;
+		$path .= implode('/', $uri) . EXT;
 
 		//Check if the file exists before actually loading it
 		if (file_exists($path)) {
