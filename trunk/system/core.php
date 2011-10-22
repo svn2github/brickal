@@ -3,18 +3,20 @@
 class Core {
 
 	public static function execute() {
+		//Assign autoloader to core class	
 		spl_autoload_register('Core::load_class');
 
+		//Initialize log library
+		Core_Log::init();
+		Core_Log::log('Core initialized!');
+		
 		Core_Router::route();
 
-		echo('>>');
+		Core_Log::log('Core finished!');
+		var_dump(Core_Log::$_log);
 	}
 
-	public static function load_class($class_name) {
-		self::load_file(implode('/', explode('_', strtolower($class_name))));
-	}
-
-	public static function load_file($file_name) {
+	public static function file_to_uri($file_name) {
 		//Define the system folders of Brickal
 		//These shouldn't exist in the application folder
 		$system_folders = array('core', 'admin', 'base');
@@ -42,7 +44,14 @@ class Core {
 
 		//Make the path complete by adding an extension_loaded
 		$path .= implode('/', $uri) . EXT;
-
+		
+		return $path;
+	}
+	
+	public static function load_file($file_name)
+	{
+		$path = self::file_to_uri($file_name);
+	
 		//Check if the file exists before actually loading it
 		if (file_exists($path)) {
 			//Reset the data variable
@@ -54,6 +63,10 @@ class Core {
 		} else {
 			//Generate an warning, if the log component is loaded, otherwise do nothing (what can we do?)
 		}
+	}
+	
+	public static function load_class($class_name) {
+		self::load_file(implode('/', explode('_', strtolower($class_name))));
 	}
 
 }

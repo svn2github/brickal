@@ -6,47 +6,20 @@
  | More information:	http://www.brickal.org/
  */
 
-/*
- |---------------------------------------------------------------
- | SYSTEM FOLDER NAME
- |---------------------------------------------------------------
- | This variable must contain the name of your "system" folder.
- | This directory does not need to be web-accessible.
- |
- | NO TRAILING SLASH!
- */
+//Set file conventions
 $system_folder = "system";
-
-/*
- |---------------------------------------------------------------
- | APPLICATION FOLDER NAME
- |---------------------------------------------------------------
- | This variable must contain the name of your "application"
- | folder. This directory does not need to be web-accessible.
- |
- | NO TRAILING SLASH!
- */
 $application_folder = "application";
-
-/*
- |---------------------------------------------------------------
- | FILE EXTENSION
- |---------------------------------------------------------------
- | This variable must contain the extension of your PHP files.
- */
 $extension = ".php";
 
-/*
- |===============================================================
- | END OF USER CONFIGURABLE SETTINGS
- |===============================================================
- */
-
-//Enable all error reporting during development
+//Enable all error reporting because we handle that ourselves
 error_reporting(E_ALL);
 ini_set('display_errors', TRUE);
 
-//Set the exact path to our installation folder
+//Set profiling start values
+define('BRICKAL_START_TIME', microtime(TRUE));
+define('BRICKAL_START_MEMORY', memory_get_usage(TRUE));
+
+//Set the exact path to our installation folders
 if (strpos($system_folder, '/') === FALSE) {
 	$system_folder = realpath(dirname(__FILE__) . '/' . $system_folder);
 }
