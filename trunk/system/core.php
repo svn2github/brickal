@@ -6,6 +6,7 @@ class Core {
 	public static $config;
 
 	public static function execute() {
+		
 		//Assign autoloader to core class	
 		spl_autoload_register('Core::load_class');
 
@@ -17,8 +18,11 @@ class Core {
 		Core_Log::init();
 		Core_Log::log('Core classes initialized');
 		
-		Core_Router::route();
+		//Execute the router and run the controller
+		$route = Core_Router::route();
+		call_user_func_array(array('Controller_' . ucfirst($route['controller']), 'action_' . $route['action']), $route['params']);
 
+		//Temporary logbook system
 		Core_Log::log('Core finished!');
 		var_dump(Core_Log::$_log);
 		

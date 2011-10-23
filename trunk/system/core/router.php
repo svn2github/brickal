@@ -23,7 +23,7 @@ class Core_Router {
 		
 		//Remove all empty segments and all index.php segments
 		$segments = str_replace('index.php', '', $segments);
-		$segments = array_values(array_filter($segments));
+		$segments = array_values(array_filter($segments, function ($element) { return (isset($element) AND $element <> ''); }));
 		
 		//Take the default route if no uri is passed
 		if ( ! isset($segments[0]))
@@ -45,13 +45,19 @@ class Core_Router {
 		
 		//Extract parameters
 		$params = $segments;
-		$params[0] = NULL;
-		$params[1] = NULL;
-		$params = array_values(array_filter($params));
-		var_dump($params);
+		array_shift($params);
+		array_shift($params);
 		
+		$results = array(
+			'controller' => $controller,
+			'action' => $action,
+			'params' => $params,		
+		);
+
 		//Add routing results to logbook
-		Core_Log::log('Routing finished, calling Controller_' . ucfirst($controller) . '::' . $action);
+		Core_Log::log('Routing finished, calling Controller_' . ucfirst($controller) . '::action_' . $action);
+		
+		return $results;
 	}
 
 }
