@@ -21,10 +21,10 @@ class Core_Persistent
 		$this->_data_location = $name;
 		
 		//Check if the file does exist
-		if (file_exists(Core::file_to_uri($name)))
+		if (file_exists(Core_Filesystem::exactpath($name)))
 		{
 			//Load the file using the core function
-			include(Core::file_to_uri($name));
+			include(Core_Filesystem::exactpath($name));
 			$this->_data = $data;
 			
 			//Overload with the defaults
@@ -34,7 +34,7 @@ class Core_Persistent
 				$this->_data_scheme_location = $scheme;
 				
 				//Load the data scheme file using the core function
-				include(Core::file_to_uri($name));
+				include(Core_Filesystem::exactpath($name));
 				$this->_data_scheme = $data;
 				
 				//Loop through the scheme to override the options whose aren't set
@@ -79,9 +79,9 @@ class Core_Persistent
 		$filedata = '<?php' . "\n" . '$data = ' . var_export($content, TRUE) . ';';
 		
 		//Write the data to the file if the file is writable
-		if (is_writable(Core::file_to_uri($this->_data_location)) or ! file_exists(Core::file_to_uri($this->_data_location)))
+		if (is_writable(Core_Filesystem::exactpath($this->_data_location)) or ! file_exists(Core_Filesystem::exactpath($this->_data_location)))
 		{
-			file_put_contents(Core::file_to_uri($this->_data_location), $filedata);
+			file_put_contents(Core_Filesystem::exactpath($this->_data_location), $filedata);
 		}
 		else
 		{

@@ -6,7 +6,7 @@ class Core_Output
 
 	public static function view($template_file)
 	{
-		$content = file_get_contents(Core::file_to_uri('view/' . $template_file));
+		$content = file_get_contents(Core_Filesystem::exactpath('view/' . $template_file));
 		foreach(self::$_vars as $name => $value)
 		{
 			$content = str_replace('{' . $name . '}', $value, $content);

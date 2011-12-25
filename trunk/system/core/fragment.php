@@ -20,11 +20,11 @@ class Core_Fragment {
 		array_walk($class_path, 'uc_element');
 		$class_name = 'Controller_Fragment_' . implode('_', $class_path);
 		
-		if (file_exists(Core::file_to_uri('controller/fragment/' . implode('/',$controller_path))))
+		if (file_exists(Core_Filesystem::exactpath('controller/fragment/' . implode('/',$controller_path))))
 		{
 			return 'controller';
 		}
-		elseif (file_exists(Core::file_to_uri('view/fragment/' . implode('/',$fragment_path))))
+		elseif (file_exists(Core_Filesystem::exactpath('view/fragment/' . implode('/',$fragment_path))))
 		{
 			return 'view';
 		}
