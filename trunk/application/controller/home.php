@@ -2,10 +2,9 @@
 
 class Controller_Home 
 {
-
 	public static function action_index()
 	{
-		echo('Hello, world!');
+		Core_Output::set('content', 'blah, blah, blah');
+		Core_Output::view('template/default');
 	}
-
 }
